@@ -9,10 +9,10 @@ public class Main {
     static String username, password, adminUser, adminPass;
     static int select;
     static int index = 0;
-    static boolean error, loop;
+    static boolean error, loop, exit;
 
     static String[][] dataMahasiswa =  new String[100][4];
-    static String[][] nilaiMahasiswa = new String[100][5];
+    static String[][] nilaiMahasiswa = new String[100][8];
 
     public static void main(String[] args) {
         System.out.println("\n\t\t\t\t-------------------------");
@@ -27,27 +27,46 @@ public class Main {
         readFile();
 
         do {
-            int result = login();
-            if (result == 0) {
-                error = false;
-                System.out.println(" <<< Selamat Datang >>>\n");
-                do {
-                    loop = true;
-                    menuAdmin();
-                }while(loop);
+            exit = false;
+            System.out.println("Menu : ");
+            System.out.println("1. Login\n2. Exit");
+            System.out.print("Pilih Menu : ");
+            select = in.nextInt();
+            in.nextLine();
+            System.out.println();
 
-            } else if (result == 1) { // soon
-                error = false;
-                System.out.println("<<< Selamat Datang >>>\n");
+            if (select == 1) {
                 do {
-                    loop = true;
-                    menuUser();
-                }while(loop);
+                    int result = login();
+                    if (result == 0) {
+                        error = false;
+                        System.out.println(" <<< Selamat Datang >>>\n");
+                        do {
+                            loop = true;
+                            menuAdmin();
+                        } while (loop);
+
+                    } else if (result == 1) {
+                        error = false;
+                        System.out.println("<<< Selamat Datang >>>\n");
+                        do {
+                            loop = true;
+                            menuUser();
+                        } while (loop);
+                    } else {
+                        error = true;
+                        System.out.println("Gagal Login !\n");
+                    }
+                } while (error);
+            } else if (select == 2) {
+                System.out.println("End Process...");
+                exit = true;
             } else {
-                error = true;
-                System.out.println("Gagal Login !\n");
+                System.out.println("Perintah Diluar Kemampuann Program !");
             }
-        }while(error);
+            System.out.println();
+        }while(!exit);
+
     }
 
     // Admin
@@ -61,7 +80,7 @@ public class Main {
         System.out.println("4. Delete Data");
         System.out.println("5. Check Profile");
         System.out.println("6. Exit");
-        System.out.print("Select Menu : ");
+        System.out.print("Pilih Menu : ");
         select = in.nextInt();
         in.nextLine();
         System.out.println();
@@ -115,50 +134,53 @@ public class Main {
     static void addData(){
         readFile();
         String[] data = new String[4];
-        String[] nilai = new String[5];
+        String[] nilai = new String[8];
         System.out.print("Nama Mahasiswa  : ");
         data[0] = in.nextLine();
         System.out.print("NIM Mahasiswa   : ");
         data[1] = in.nextLine();
-        System.out.print("Jurusan\t\t\t: ");
+        System.out.print("Usia\t\t\t: ");
         data[2] = in.nextLine();
         System.out.print("Asal Daerah\t\t: ");
         data[3] = in.nextLine();
 
         System.out.println("\n1. Add Nilai\n2. Kembali");
-        System.out.print("Select Menu : ");
+        System.out.print("Pilih Menu : ");
         select = in.nextInt();
         in.nextLine();
         System.out.println();
 
         if(select == 1){
             System.out.println("----- Nilai -----");
-            System.out.print("Algoritma Pemrograman\t\t: ");
+            System.out.print("Al-Islam dan Kemuhammadiyahan III : ");
             nilai[0] = in.nextLine();
-            System.out.print("Struktur Data\t\t\t\t: ");
+            System.out.print("Algoritma Pemrograman\t\t\t  : ");
             nilai[1] = in.nextLine();
-            System.out.print("Komunikasi Data\t\t\t\t: ");
+            System.out.print("Grafika Komputer\t\t\t\t  : ");
             nilai[2] = in.nextLine();
-            System.out.print("Statistika dan Probabilitas\t: ");
+            System.out.print("Kewarganegaraan\t\t\t\t\t  : ");
             nilai[3] = in.nextLine();
-            System.out.print("Grafika Komputer\t\t\t: ");
+            System.out.print("Komunikasi Data\t\t\t\t\t  : ");
             nilai[4] = in.nextLine();
-
-            System.out.println("Index : " + index);
+            System.out.print("Metode Numerik\t\t\t\t\t  : ");
+            nilai[5] = in.nextLine();
+            System.out.print("Statistika dan Probabilitas\t\t  : ");
+            nilai[6] = in.nextLine();
+            System.out.print("Struktur Data\t\t\t\t\t  : ");
+            nilai[7] = in.nextLine();
 
             System.arraycopy(data, 0, dataMahasiswa[index], 0, 4);
-            System.arraycopy(nilai, 0, nilaiMahasiswa[index], 0, 5);
+            System.arraycopy(nilai, 0, nilaiMahasiswa[index], 0, 8);
 
         }
         else {
             System.arraycopy(data, 0, dataMahasiswa[index], 0, 4);
 
-            for(int i=0; i<5; i++){
+            for(int i=0; i<8; i++){
                 nilaiMahasiswa[index][i] = "0";
             }
         }
         index++;
-        System.out.println("Index : " + index);
         sort();
         saveFile();
 
@@ -185,17 +207,20 @@ public class Main {
                 System.out.println("----------------------------------------");
                 System.out.println("Nama\t\t: " + dataMahasiswa[i][0]);
                 System.out.println("NIM\t\t\t: " + dataMahasiswa[i][1]);
-                System.out.println("Jurusan\t\t: " + dataMahasiswa[i][2]);
+                System.out.println("Usia\t\t: " + dataMahasiswa[i][2] + " Tahun");
                 System.out.println("Asal Daerah\t: " + dataMahasiswa[i][3]);
                 System.out.println("----------------------------------------");
 
-                System.out.println("\n------------- Nilai -------------");
-                System.out.println("Algoritma Pemrograman\t\t: " + nilaiMahasiswa[i][0]);
-                System.out.println("Struktur Data\t\t\t\t: " + nilaiMahasiswa[i][1]);
-                System.out.println("Komunikasi Data\t\t\t\t: " + nilaiMahasiswa[i][2]);
-                System.out.println("Statistika dan Probabilitas\t: " + nilaiMahasiswa[i][3]);
-                System.out.println("Grafika Komputer\t\t\t: " + nilaiMahasiswa[i][4]);
-                System.out.println("--------------------------------");
+                System.out.println("\n---------------- Nilai ----------------");
+                System.out.println("Al-Islam dan Kemuhammadiyahan III : " + nilaiMahasiswa[i][0]);
+                System.out.println("Algoritma Pemrograman\t\t\t  : " + nilaiMahasiswa[i][1]);
+                System.out.println("Grafika Komputer\t\t\t\t  : " + nilaiMahasiswa[i][2]);
+                System.out.println("Kewarganegaraan\t\t\t\t\t  : " + nilaiMahasiswa[i][3]);
+                System.out.println("Komunikasi Data\t\t\t\t\t  : " + nilaiMahasiswa[i][4]);
+                System.out.println("Metode Numerik\t\t\t\t\t  : " + nilaiMahasiswa[i][5]);
+                System.out.println("Statistika dan Probabilitas\t\t  : " + nilaiMahasiswa[i][6]);
+                System.out.println("Struktur Data\t\t\t\t\t  : " + nilaiMahasiswa[i][7]);
+                System.out.println("--------------------------------------");
 
                 break;
             }
@@ -210,12 +235,12 @@ public class Main {
         String name;
         int i;
         displayName();
-        System.out.print("Select Name  : ");
+        System.out.print("Nama  : ");
         name = in.nextLine();
         System.out.println();
 
         System.out.println("1. Update Informasi\n2. Update Nilai\n3. Kembali");
-        System.out.print("Select Menu : ");
+        System.out.print("Pilih Menu : ");
         select = in.nextInt();
         in.nextLine();
 
@@ -224,11 +249,11 @@ public class Main {
             System.out.println("---------- Update Informasi ----------");
             while(!dataMahasiswa[i][0].equals("#")){
                 if(dataMahasiswa[i][0].equals(name)){
-                    System.out.print("Nama Baru : ");
+                    System.out.print("Nama Baru        : ");
                     dataMahasiswa[i][0] = in.nextLine();
-                    System.out.print("NIM Baru : ");
+                    System.out.print("NIM Baru         : ");
                     dataMahasiswa[i][1] = in.nextLine();
-                    System.out.print("Jurusan Baru : ");
+                    System.out.print("Usia Baru        : ");
                     dataMahasiswa[i][2] = in.nextLine();
                     System.out.print("Asal Daerah Baru : ");
                     dataMahasiswa[i][3] = in.nextLine();
@@ -242,19 +267,25 @@ public class Main {
 
         else if(select == 2){
             i = 0;
-            System.out.println("---------- Update Nilai ----------");
+            System.out.println("------------- Update Nilai -------------");
             while(!dataMahasiswa[i][0].equals("#")){
                 if(dataMahasiswa[i][0].equals(name)){
-                    System.out.print("Algoritma Pemrograman\t\t: ");
+                    System.out.print("Al-Islam dan Kemuhammadiyahan III : ");
                     nilaiMahasiswa[i][0] = in.nextLine();
-                    System.out.print("Struktur Data\t\t\t\t: ");
+                    System.out.print("Algoritma Pemrograman\t\t\t  : ");
                     nilaiMahasiswa[i][1] = in.nextLine();
-                    System.out.print("Komunikasi Data\t\t\t\t: ");
+                    System.out.print("Grafika Komputer\t\t\t\t  : ");
                     nilaiMahasiswa[i][2] = in.nextLine();
-                    System.out.print("Statistika dan Probabilitas\t: ");
+                    System.out.print("Kewarganegaraan\t\t\t\t\t  : ");
                     nilaiMahasiswa[i][3] = in.nextLine();
-                    System.out.print("Grafika Komputer\t\t\t: ");
+                    System.out.print("Komunikasi Data\t\t\t\t\t  : ");
                     nilaiMahasiswa[i][4] = in.nextLine();
+                    System.out.print("Metode Numerik\t\t\t\t\t  : ");
+                    nilaiMahasiswa[i][5] = in.nextLine();
+                    System.out.print("Statistika dan Probabilitas\t\t  : ");
+                    nilaiMahasiswa[i][6] = in.nextLine();
+                    System.out.print("Struktur Data\t\t\t\t\t  : ");
+                    nilaiMahasiswa[i][7] = in.nextLine();
                 }
                 i++;
             }
@@ -305,7 +336,7 @@ public class Main {
 
         System.out.println("1. Update Data");
         System.out.println("2. Kembali");
-        System.out.print("Select Menu : ");
+        System.out.print("Pilih Menu : ");
         select = in.nextInt();
         in.nextLine();
         System.out.println();
@@ -323,7 +354,7 @@ public class Main {
         char respon;
         System.out.println(" ----- Update Menu -----");
         System.out.println("1. Username\n2. Password\n3. Kembali");
-        System.out.print("Select Menu : ");
+        System.out.print("Pilih Menu : ");
         select = in.nextInt();
         in.nextLine();
         System.out.println();
@@ -454,7 +485,7 @@ public class Main {
             }
 
             for(int i=0; read3.hasNextLine(); i++){
-                for(int j=0; j<5; j++){
+                for(int j=0; j<8; j++){
                     if(read3.hasNextLine()){
                         nilaiMahasiswa[i][j] = read3.nextLine();
                     }
@@ -506,6 +537,9 @@ public class Main {
                 fileNilai.write(nilaiMahasiswa[i][2] +"\n");
                 fileNilai.write(nilaiMahasiswa[i][3] +"\n");
                 fileNilai.write(nilaiMahasiswa[i][4] +"\n");
+                fileNilai.write(nilaiMahasiswa[i][5] +"\n");
+                fileNilai.write(nilaiMahasiswa[i][6] +"\n");
+                fileNilai.write(nilaiMahasiswa[i][7] +"\n");
             }
 
             fileIndex.write(String.valueOf(index));
@@ -520,7 +554,7 @@ public class Main {
         }
     }
 
-    // User, Soon (Masih On Going)
+    // Menu User
 
     static void menuUser(){
         readFile();
@@ -529,7 +563,7 @@ public class Main {
         System.out.println("2. Cek Profil");
         System.out.println("3. Update Profil");
         System.out.println("4. Exit");
-        System.out.print("Select Menu : ");
+        System.out.print("Pilih Menu : ");
         select = in.nextInt();
         in.nextLine();
         System.out.println();
@@ -538,13 +572,16 @@ public class Main {
             int i = 0;
             while(!dataMahasiswa[i][0].equals("#")){
                 if(username.equals(dataMahasiswa[i][0])){
-                    System.out.println("------------- Nilai -------------");
-                    System.out.println("Algoritma Pemrograman\t\t: " + nilaiMahasiswa[i][0]);
-                    System.out.println("Struktur Data\t\t\t\t: " + nilaiMahasiswa[i][1]);
-                    System.out.println("Komunikasi Data\t\t\t\t: " + nilaiMahasiswa[i][2]);
-                    System.out.println("Statistika dan Probabilitas\t: " + nilaiMahasiswa[i][3]);
-                    System.out.println("Grafika Komputer\t\t\t: " + nilaiMahasiswa[i][4]);
-                    System.out.println("--------------------------------");
+                    System.out.println("\n---------------- Nilai ----------------");
+                    System.out.println("Al-Islam dan Kemuhammadiyahan III : " + nilaiMahasiswa[i][0]);
+                    System.out.println("Algoritma Pemrograman\t\t\t  : " + nilaiMahasiswa[i][1]);
+                    System.out.println("Grafika Komputer\t\t\t\t  : " + nilaiMahasiswa[i][2]);
+                    System.out.println("Kewarganegaraan\t\t\t\t\t  : " + nilaiMahasiswa[i][3]);
+                    System.out.println("Komunikasi Data\t\t\t\t\t  : " + nilaiMahasiswa[i][4]);
+                    System.out.println("Metode Numerik\t\t\t\t\t  : " + nilaiMahasiswa[i][5]);
+                    System.out.println("Statistika dan Probabilitas\t\t  : " + nilaiMahasiswa[i][6]);
+                    System.out.println("Struktur Data\t\t\t\t\t  : " + nilaiMahasiswa[i][7]);
+                    System.out.println("--------------------------------------");
                     break;
                 }else {
                     i++;
@@ -559,7 +596,7 @@ public class Main {
                     System.out.println("----------------------------------------");
                     System.out.println("Nama\t\t: " + dataMahasiswa[i][0]);
                     System.out.println("NIM\t\t\t: " + dataMahasiswa[i][1]);
-                    System.out.println("Jurusan\t\t: " + dataMahasiswa[i][2]);
+                    System.out.println("Usia\t\t: " + dataMahasiswa[i][2] + " Tahun");
                     System.out.println("Asal Daerah\t: " + dataMahasiswa[i][3]);
                     System.out.println("----------------------------------------");
                     break;
@@ -571,13 +608,13 @@ public class Main {
 
         else if(select == 3){
             int i = 0;
-            while(dataMahasiswa[i][0] != null){
+            while(!dataMahasiswa[i][0].equals("#")){
                 if(username.equals(dataMahasiswa[i][0])){
-                    System.out.print("Nama Baru : ");
+                    System.out.print("Nama Baru        : ");
                     dataMahasiswa[i][0] = in.nextLine();
-                    System.out.print("NIM Baru : ");
+                    System.out.print("NIM Baru         : ");
                     dataMahasiswa[i][1] = in.nextLine();
-                    System.out.print("Jurusan Baru : ");
+                    System.out.print("Usia Baru        : ");
                     dataMahasiswa[i][2] = in.nextLine();
                     System.out.print("Asal Daerah Baru : ");
                     dataMahasiswa[i][3] = in.nextLine();
@@ -597,6 +634,5 @@ public class Main {
 
         System.out.println();
     }
-
 
 }
